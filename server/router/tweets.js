@@ -1,9 +1,9 @@
 import express from "express";
 import "express-async-errors";
-import * as tweetController from "../controller/tweet.js";
 import { body } from "express-validator";
-import { validate } from "../middleware/validator.js";
+import * as tweetController from "../controller/tweet.js";
 import { isAuth } from "../middleware/auth.js";
+import { validate } from "../middleware/validator.js";
 
 const router = express.Router();
 
@@ -15,17 +15,17 @@ const validateTweet = [
   validate,
 ];
 
-// GET/tweets
-// GET/tweets?username-:username
+// GET /tweet
+// GET /tweets?username=:username
 router.get("/", isAuth, tweetController.getTweets);
 
-// GET/tweets/:id
+// GET /tweets/:id
 router.get("/:id", isAuth, tweetController.getTweet);
 
-// POST/tweets
+// POST /tweeets
 router.post("/", isAuth, validateTweet, tweetController.createTweet);
 
-// PUT/tweets/:id
+// PUT /tweets/:id
 router.put("/:id", isAuth, validateTweet, tweetController.updateTweet);
 
 // DELETE /tweets/:id

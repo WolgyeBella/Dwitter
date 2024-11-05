@@ -7,9 +7,9 @@ import {
   useImperativeHandle,
   useMemo,
   useState,
-} from 'react';
-import Header from '../components/Header';
-import Login from '../pages/Login';
+} from "react";
+import Header from "../components/Header";
+import Login from "../pages/Login";
 
 const AuthContext = createContext({});
 

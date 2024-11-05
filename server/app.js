@@ -1,14 +1,15 @@
 import express from "express";
+import "express-async-errors";
 import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
-import "express-async-errors";
 import tweetsRouter from "./router/tweets.js";
 import authRouter from "./router/auth.js";
 import { config } from "./config.js";
 import { initSocket } from "./connection/socket.js";
 
 const app = express();
+
 app.use(express.json());
 app.use(helmet());
 app.use(cors());

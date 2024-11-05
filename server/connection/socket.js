@@ -7,12 +7,15 @@ class Socket {
     this.io = new Server(server, {
       cors: {
         origin: "*",
+        // origin: "http://localhost:3000/",
       },
     });
 
     this.io.use((socket, next) => {
+      
       const token = socket.handshake.auth.token;
       if (!token) {
+        console.log('오류 발생 지점');
         return next(new Error("Authentication error"));
       }
       jwt.verify(token, config.jwt.secretKey, (error, decoded) => {

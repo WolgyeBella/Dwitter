@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import "express-async-errors";
+import {} from "express-async-errors";
 import * as userRepository from "../data/auth.js";
 import { config } from "../config.js";
 
@@ -28,8 +28,8 @@ export async function login(req, res) {
   if (!user) {
     return res.status(401).json({ message: "Invalid user or password" });
   }
-  const insValidPassword = await bcrypt.compare(password, user.password);
-  if (!insValidPassword) {
+  const isValidPassword = await bcrypt.compare(password, user.password);
+  if (!isValidPassword) {
     return res.status(401).json({ message: "Invalid user or password" });
   }
   const token = createJwtToken(user.id);
@@ -37,8 +37,6 @@ export async function login(req, res) {
 }
 
 function createJwtToken(id) {
-  console.log(config.jwt.secretKey);
-
   return jwt.sign({ id }, config.jwt.secretKey, {
     expiresIn: config.jwt.expiresInSec,
   });

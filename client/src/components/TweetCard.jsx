@@ -1,7 +1,7 @@
-import React, { memo, useState } from 'react';
-import parseDate from '../util/date';
-import Avatar from './Avatar';
-import EditTweetForm from './EditTweetForm';
+import React, { memo, useState } from "react";
+import parseDate from "../util/date";
+import Avatar from "./Avatar";
+import EditTweetForm from "./EditTweetForm";
 
 const TweetCard = memo(
   ({ tweet, owner, onDelete, onUpdate, onUsernameClick }) => {

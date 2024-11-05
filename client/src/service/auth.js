@@ -24,7 +24,7 @@ export default class AuthService {
       method: "POST",
       body: JSON.stringify({ username, password }),
     });
-    this.tokenStorage.saveToken("data.token");
+    this.tokenStorage.saveToken(data.token);
     return data;
   }
 

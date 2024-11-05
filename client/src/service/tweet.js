@@ -4,6 +4,7 @@ export default class TweetService {
     this.tokenStorage = tokenStorage;
     this.socket = socket;
   }
+
   async getTweets(username) {
     const query = username ? `?username=${username}` : "";
     return this.http.fetch(`/tweets${query}`, {
