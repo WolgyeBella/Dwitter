@@ -1,16 +1,11 @@
-import Mongoose from "mongoose";
+import mysql from "mysql2";
 import { config } from "../config.js";
 
-export async function connectDB() {
-  return Mongoose.connect(config.db.host);
-}
+const pool = mysql.createPool({
+  host: config.db.host,
+  user: config.db.user,
+  database: config.db.database,
+  password: config.db.password,
+});
 
-// TODO(Ellie): Delete blow
-
-export function userVirtualId(schema) {
-  schema.virtual("id").get(function () {
-    return this._id.toString();
-  });
-  schema.set("toJSON", { virtuals: true });
-  schema.set("toObject", { virtuals: true });
-}
+export const db = pool.promise();
