@@ -1,48 +1,44 @@
-import Mongoose from "mongoose";
-import { userVirtualId } from "../database/database.js";
+import { db } from "../db/database.js";
 import * as userRepository from "./auth.js";
 
-const tweetSchema = new Mongoose.Schema(
-  {
-    text: { type: String, required: true },
-    userId: { type: String, required: true },
-    name: { type: String, required: true },
-    username: { type: String, required: true },
-    url: String,
-  },
-  { timestamps: true }
-);
-
-userVirtualId(tweetSchema);
-const Tweet = Mongoose.model("Tweet", tweetSchema);
+const SELECT_JOIN =
+  "SELECT tw.id, tw.text, tw.createAt, tw.userId, us.username, us.name, us.url FROM tweets as tw JOIN users as us ON tw.userId=us.id";
+const ORDER_DESC = "ORDER BY tw.createAt DESC";
 
 export async function getAll() {
-  return Tweet.find().sort({ createdAt: -1 });
+  return db
+    .execute(`${SELECT_JOIN} ${ORDER_DESC}`) //
+    .then((result) => result[0]);
 }
 
 export async function getAllByUsername(username) {
-  return Tweet.find({ username }).sort({ createdAt: -1 });
+  return db
+    .execute(`${SELECT_JOIN} WHERE username=? ${ORDER_DESC}`, [username]) //
+    .then((result) => result[0]);
 }
 
 export async function getById(id) {
-  return Tweet.findById(id);
+  return db
+    .execute(`${SELECT_JOIN} WHERE tw.id=?`, [id]) //
+    .then((result) => result[0][0]);
 }
 
 export async function create(text, userId) {
-  return userRepository.findById(userId).then((user) =>
-    new Tweet({
+  return db
+    .execute("INSERT INTO tweets (text, createAt, userId) VALUE(?,?,?)", [
       text,
+      new Date(),
       userId,
-      name: user.name,
-      username: user.username,
-    }).save()
-  );
+    ])
+    .then((result) => getById(result[0].insertId));
 }
 
 export async function update(id, text) {
-  return Tweet.findByIdAndUpdate(id, { text }, { returnOriginal: false });
+  return db
+    .execute("UPDATE tweets SET text=? WHERE id=?", [text, id])
+    .then(() => getById(id));
 }
 
 export async function remove(id) {
-  return Tweet.findByIdAndDelete(id);
+  return db.execute("DELETE FROM tweets WHERE id=?", [id]);
 }
